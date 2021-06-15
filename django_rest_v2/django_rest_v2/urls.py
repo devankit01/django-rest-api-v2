@@ -22,10 +22,13 @@ urlpatterns = [
 
 
     # restapp01
-    path('get/' , get ,  name='get' ),
-    path('get-books/' , getBooks ,  name='getBooks' ),
-    path('post/' , post ,  name='post' ),
-    path('update/<id>/', update , name='update' ),
-    path('delete/<id>/', delete , name='delete' )
+    # path('get/' , get ,  name='get' ),
+    # path('get-books/' , getBooks ,  name='getBooks' ),
+    # path('post/' , post ,  name='post' ),
+    # path('update/<id>/', update , name='update' ),
+    # path('delete/<id>/', delete , name='delete' )
+
+    path('student/' , StudentAPI.as_view() ),
+
 
 ]
