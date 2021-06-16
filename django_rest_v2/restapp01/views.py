@@ -6,19 +6,47 @@ from .serializers import *
 
 from rest_framework.views import APIView
 
+from rest_framework.authtoken.models import Token
+
+
 # Create your views here.
 
 
+class RegisterUserView(APIView):
 
+
+    def post(self, request):
+        serializers = UserSerializer(data = request.data)
+
+        if not serializers.is_valid():
+            return Response({'status': 403, "message": serializers.errors})
+
+        else:
+            serializers.save()
+
+            # Token
+            user = User.objects.get(username=serializers.data['username'])
+            token , _ = Token.objects.get_or_create(user = user)
+            return Response({'data': serializers.data, 'status': 200 ,'token' : str(token)})
+
+
+# API for Student CRUD
+
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 class StudentAPI(APIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         students = Student.objects.all()
         print(students)
         serializers = StudentSerializer(students, many=True)
         print(serializers.data)
+        print(request.user)
         return Response(serializers.data)
 
 
